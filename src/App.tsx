@@ -43,12 +43,15 @@ class App extends React.Component<{}, IState> {
     prevProps: Readonly<{}>,
     prevState: Readonly<IState>
   ) {
-    if (prevState.query !== this.state.query) {
-      this.onFetchImages(this.state.query, this.state.page);
+    const { query: prevQuery, page: prevPage } = prevState;
+    const { query: nextQuery, page: nextPage } = this.state;
+
+    if (prevQuery !== nextQuery) {
+      this.onFetchImages(nextQuery, nextPage);
     }
 
-    if (prevState.page !== this.state.page && this.state.page !== 1) {
-      this.onFetchImages(this.state.query, this.state.page);
+    if (prevPage !== nextPage && nextPage !== 1) {
+      this.onFetchImages(nextQuery, nextPage);
     }
   }
 
@@ -133,14 +136,16 @@ class App extends React.Component<{}, IState> {
   };
 
   render() {
+    const { images, showLoadMore, isLoading, showModal } = this.state;
+
     return (
       <>
         <Searchbar onSubmit={this.onSubmit} />
-        <ImageGallery images={this.state.images} onClick={this.onClickImage} />
-        {this.state.showLoadMore && <Button onClick={this.onLoadMore} />}
+        <ImageGallery images={images} onClick={this.onClickImage} />
+        {showLoadMore && <Button onClick={this.onLoadMore} />}
         <Toaster position="top-right" />
 
-        {this.state.isLoading && (
+        {isLoading && (
           <div className="spinner-container">
             <Blocks
               visible={true}
@@ -153,9 +158,7 @@ class App extends React.Component<{}, IState> {
           </div>
         )}
 
-        {this.state.showModal && (
-          <Modal image={this.state.showModal} onClose={this.onCloseModal} />
-        )}
+        {showModal && <Modal image={showModal} onClose={this.onCloseModal} />}
       </>
     );
   }
