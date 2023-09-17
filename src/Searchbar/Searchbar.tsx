@@ -21,11 +21,6 @@ export class Searchbar extends React.Component<ISearchbar, IState> {
       return;
     }
     this.props.onSubmit(this.state.query);
-    this.reset();
-  };
-
-  reset = () => {
-    this.setState({ query: "" });
   };
 
   onChange = (e: React.FormEvent<HTMLInputElement>) => {

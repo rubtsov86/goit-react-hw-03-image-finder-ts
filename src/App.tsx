@@ -5,6 +5,7 @@ import { Blocks } from "react-loader-spinner";
 import { Searchbar } from "./Searchbar/Searchbar";
 import { ImageGallery } from "./ImageGallery/ImageGallery";
 import { Button } from "./Button/Button";
+import { Modal } from "./Modal/Modal";
 
 export interface IData {
   id: string;
@@ -18,6 +19,7 @@ interface IState {
   query: string;
   showLoadMore: boolean;
   isLoading: boolean;
+  showModal: string;
 }
 
 interface IResponse {
@@ -34,6 +36,7 @@ class App extends React.Component<{}, IState> {
     query: "",
     showLoadMore: false,
     isLoading: false,
+    showModal: "",
   };
 
   async componentDidUpdate(
@@ -103,11 +106,30 @@ class App extends React.Component<{}, IState> {
     });
   };
 
+  onClickImage = (e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).nodeName !== "IMG") {
+      return;
+    }
+    const imageId = (e.target as HTMLImageElement).id;
+
+    const imageToClick: IData = this.state.images.find(
+      ({ id }) => id === Number(imageId)
+    )!;
+
+    // const newState = {
+    //   [inputName]: inputRef.value,
+    // } as Pick<IState, keyof IState>;
+
+    this.setState((prevState: IState) => {
+      return { ...prevState, showModal: imageToClick.largeImageURL };
+    });
+  };
+
   render() {
     return (
       <>
         <Searchbar onSubmit={this.onSubmit} />
-        <ImageGallery images={this.state.images} />
+        <ImageGallery images={this.state.images} onClick={this.onClickImage} />
         {this.state.showLoadMore && <Button onClick={this.onLoadMore} />}
         <Toaster position="top-right" />
 
@@ -123,6 +145,8 @@ class App extends React.Component<{}, IState> {
             />
           </div>
         )}
+
+        {this.state.showModal && <Modal image={this.state.showModal} />}
       </>
     );
   }
