@@ -110,7 +110,7 @@ class App extends React.Component<{}, IState> {
 
   resetImages = () => {
     this.setState((prevState) => {
-      return { ...prevState, showLoadMore: false, images: [], page: 1 };
+      return { showLoadMore: false, images: [], page: 1 };
     });
   };
 
@@ -131,7 +131,7 @@ class App extends React.Component<{}, IState> {
 
   onCloseModal = () => {
     this.setState((prevState) => {
-      return { ...prevState, showModal: "" };
+      return { showModal: "" };
     });
   };
 
