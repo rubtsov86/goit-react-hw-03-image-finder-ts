@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/goit-react-hw-03-image-finder-ts/static/css/main.d759bc07.css",
-    "main.js": "/goit-react-hw-03-image-finder-ts/static/js/main.27d398c5.js",
+    "main.js": "/goit-react-hw-03-image-finder-ts/static/js/main.1ca1720e.js",
     "static/js/787.28cb0dcd.chunk.js": "/goit-react-hw-03-image-finder-ts/static/js/787.28cb0dcd.chunk.js",
     "index.html": "/goit-react-hw-03-image-finder-ts/index.html",
     "static/media/loupe_icon.svg": "/goit-react-hw-03-image-finder-ts/static/media/loupe_icon.d4d594caeaa640b51cdcb6cf019e54be.svg",
     "main.d759bc07.css.map": "/goit-react-hw-03-image-finder-ts/static/css/main.d759bc07.css.map",
-    "main.27d398c5.js.map": "/goit-react-hw-03-image-finder-ts/static/js/main.27d398c5.js.map",
+    "main.1ca1720e.js.map": "/goit-react-hw-03-image-finder-ts/static/js/main.1ca1720e.js.map",
     "787.28cb0dcd.chunk.js.map": "/goit-react-hw-03-image-finder-ts/static/js/787.28cb0dcd.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.d759bc07.css",
-    "static/js/main.27d398c5.js"
+    "static/js/main.1ca1720e.js"
   ]
 }
