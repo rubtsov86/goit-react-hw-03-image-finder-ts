@@ -1,4 +1,5 @@
 import React from "react";
+import toast, { Toaster } from "react-hot-toast";
 
 interface IState {
   query: string;
@@ -15,6 +16,10 @@ export class Searchbar extends React.Component<ISearchbar, IState> {
 
   onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
+    if (this.state.query === "") {
+      toast.error("Fill the input!");
+      return;
+    }
     this.props.onSubmit(this.state.query);
     this.reset();
   };
@@ -30,23 +35,26 @@ export class Searchbar extends React.Component<ISearchbar, IState> {
 
   render() {
     return (
-      <header className="Searchbar">
-        <form className="SearchForm" onSubmit={this.onSubmit}>
-          <button type="submit" className="SearchForm-button">
-            <span className="SearchForm-button-label">Search</span>
-          </button>
+      <>
+        <header className="Searchbar">
+          <form className="SearchForm" onSubmit={this.onSubmit}>
+            <button type="submit" className="SearchForm-button">
+              <span className="SearchForm-button-label">Search</span>
+            </button>
 
-          <input
-            onChange={this.onChange}
-            className="SearchForm-input"
-            type="text"
-            autoComplete="off"
-            autoFocus
-            placeholder="Search images and photos"
-            value={this.state.query}
-          />
-        </form>
-      </header>
+            <input
+              onChange={this.onChange}
+              className="SearchForm-input"
+              type="text"
+              autoComplete="off"
+              autoFocus
+              placeholder="Search images and photos"
+              value={this.state.query}
+            />
+          </form>
+          <Toaster position="top-right" />
+        </header>
+      </>
     );
   }
 }

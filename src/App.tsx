@@ -1,5 +1,7 @@
 import React from "react";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
+import { Blocks } from "react-loader-spinner";
 import { Searchbar } from "./Searchbar/Searchbar";
 import { ImageGallery } from "./ImageGallery/ImageGallery";
 import { Button } from "./Button/Button";
@@ -15,6 +17,7 @@ interface IState {
   page: number;
   query: string;
   showLoadMore: boolean;
+  isLoading: boolean;
 }
 
 interface IResponse {
@@ -30,14 +33,14 @@ class App extends React.Component<{}, IState> {
     page: 1,
     query: "",
     showLoadMore: false,
+    isLoading: false,
   };
 
   async componentDidUpdate(
     prevProps: Readonly<{}>,
     prevState: Readonly<IState>
   ) {
-    if (prevState.query !== this.state.query && this.state.query !== "") {
-      this.resetImages();
+    if (prevState.query !== this.state.query) {
       this.onFetchImages(this.state.query, this.state.page);
     }
 
@@ -47,11 +50,23 @@ class App extends React.Component<{}, IState> {
   }
 
   onFetchImages = async (query: string, page: number) => {
+    this.setState((state: IState) => {
+      return {
+        ...state,
+        isLoading: true,
+      };
+    });
+
     const API = axios.create({
       baseURL: `https://pixabay.com/api/?q=${query}&page=${page}&key=26229759-3aa7093be117df00e52b30f1f&image_type=photo&orientation=horizontal&per_page=12`,
     });
 
     const response: IResponse = await API.get("/search?query=react");
+
+    if (response.data.hits.length === 0) {
+      toast.error("Ups... We don't find any images, try something else");
+      return;
+    }
 
     const newImages = response.data.hits.map(
       ({ id, webformatURL, largeImageURL }) => {
@@ -66,11 +81,13 @@ class App extends React.Component<{}, IState> {
         ...state,
         images: [...state.images, ...newImages],
         showLoadMore: totalImages === response.data.totalHits ? false : true,
+        isLoading: false,
       };
     });
   };
 
   onSubmit = (query: string) => {
+    this.resetImages();
     this.setState({ query });
   };
 
@@ -82,7 +99,7 @@ class App extends React.Component<{}, IState> {
 
   resetImages = () => {
     this.setState((prevState) => {
-      return { ...prevState, showLoadMore: false, images: [] };
+      return { ...prevState, showLoadMore: false, images: [], page: 1 };
     });
   };
 
@@ -92,6 +109,20 @@ class App extends React.Component<{}, IState> {
         <Searchbar onSubmit={this.onSubmit} />
         <ImageGallery images={this.state.images} />
         {this.state.showLoadMore && <Button onClick={this.onLoadMore} />}
+        <Toaster position="top-right" />
+
+        {this.state.isLoading && (
+          <div className="spinner-container">
+            <Blocks
+              visible={true}
+              height="120"
+              width="120"
+              ariaLabel="blocks-loading"
+              wrapperStyle={{}}
+              wrapperClass="blocks-wrapper"
+            />
+          </div>
+        )}
       </>
     );
   }
