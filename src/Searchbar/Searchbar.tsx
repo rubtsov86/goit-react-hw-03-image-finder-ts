@@ -1,5 +1,6 @@
 import React from "react";
 import toast, { Toaster } from "react-hot-toast";
+import svg from "./loupe_icon.svg";
 
 interface IState {
   query: string;
@@ -33,7 +34,11 @@ export class Searchbar extends React.Component<ISearchbar, IState> {
       <>
         <header className="Searchbar">
           <form className="SearchForm" onSubmit={this.onSubmit}>
-            <button type="submit" className="SearchForm-button">
+            <button
+              type="submit"
+              className="SearchForm-button"
+              style={{ backgroundImage: `url(${svg})` }}
+            >
               <span className="SearchForm-button-label">Search</span>
             </button>
 

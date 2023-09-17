@@ -52,6 +52,10 @@ class App extends React.Component<{}, IState> {
     }
   }
 
+  onHideLoading = () => {
+    this.setState({ isLoading: false });
+  };
+
   onFetchImages = async (query: string, page: number) => {
     this.setState((state: IState) => {
       return {
@@ -68,6 +72,7 @@ class App extends React.Component<{}, IState> {
 
     if (response.data.hits.length === 0) {
       toast.error("Ups... We don't find any images, try something else");
+      setTimeout(this.onHideLoading, 3000);
       return;
     }
 
@@ -116,12 +121,14 @@ class App extends React.Component<{}, IState> {
       ({ id }) => id === Number(imageId)
     )!;
 
-    // const newState = {
-    //   [inputName]: inputRef.value,
-    // } as Pick<IState, keyof IState>;
-
     this.setState((prevState: IState) => {
       return { ...prevState, showModal: imageToClick.largeImageURL };
+    });
+  };
+
+  onCloseModal = () => {
+    this.setState((prevState) => {
+      return { ...prevState, showModal: "" };
     });
   };
 
@@ -146,7 +153,9 @@ class App extends React.Component<{}, IState> {
           </div>
         )}
 
-        {this.state.showModal && <Modal image={this.state.showModal} />}
+        {this.state.showModal && (
+          <Modal image={this.state.showModal} onClose={this.onCloseModal} />
+        )}
       </>
     );
   }
