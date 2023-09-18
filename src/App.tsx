@@ -71,30 +71,32 @@ class App extends React.Component<{}, IState> {
       baseURL: `https://pixabay.com/api/?q=${query}&page=${page}&key=26229759-3aa7093be117df00e52b30f1f&image_type=photo&orientation=horizontal&per_page=12`,
     });
 
-    const response: IResponse = await API.get("/search?query=react");
-
-    if (response.data.hits.length === 0) {
-      toast.error("Ups... We don't find any images, try something else");
-      setTimeout(this.onHideLoading, 3000);
-      return;
-    }
-
-    const newImages = response.data.hits.map(
-      ({ id, webformatURL, largeImageURL }) => {
-        return { id, webformatURL, largeImageURL };
+    try {
+      const response: IResponse = await API.get("/search?query=react");
+      if (response.data.hits.length === 0) {
+        toast.error("Ups... We don't find any images, try something else");
+        setTimeout(this.onHideLoading, 500);
+        return;
       }
-    );
+      const newImages = response.data.hits.map(
+        ({ id, webformatURL, largeImageURL }) => {
+          return { id, webformatURL, largeImageURL };
+        }
+      );
 
-    const totalImages = this.state.images.length + newImages.length;
+      const totalImages = this.state.images.length + newImages.length;
 
-    this.setState((state: IState) => {
-      return {
-        ...state,
-        images: [...state.images, ...newImages],
-        showLoadMore: totalImages === response.data.totalHits ? false : true,
-        isLoading: false,
-      };
-    });
+      this.setState((state: IState) => {
+        return {
+          ...state,
+          images: [...state.images, ...newImages],
+          showLoadMore: totalImages === response.data.totalHits ? false : true,
+          isLoading: false,
+        };
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   onSubmit = (query: string) => {
